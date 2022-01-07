@@ -20,6 +20,7 @@ contract AuthNFT is
   using Counters for Counters.Counter;
   address owner;
 
+  bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 public constant USER_ROLE = keccak256("USER_ROLE");
@@ -30,6 +31,7 @@ contract AuthNFT is
     string special_str;
     uint256 special_num;
     uint256 rand_num;
+    bytes32 permission;
   }
 
   mapping(uint256 => Content) private _tokenIdToContent;
@@ -82,13 +84,18 @@ contract AuthNFT is
     return _baseTokenURI;
   }
 
-  function mint(address to, string calldata special_str, uint256 special_num) public {
+  function mint(address to, string calldata special_str, uint256 special_num, bytes32 permission) public {
     require(hasRole(MINTER_ROLE, _msgSender()), "AuthNFT: Must have minter role to mint.");
+    console.log("premint");
     _mint(to, _tokenIdTracker.current());
     
+    if (permission == ADMIN_ROLE) {
+      console.log("matches");
+    }
     console.log(_tokenIdTracker.current());
+
     uint256 rand_num = (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))));
-    Content memory content = Content(special_str, special_num, rand_num);
+    Content memory content = Content(special_str, special_num, rand_num, permission);
     _tokenIdToContent[_tokenIdTracker.current()] = content;
 
     _setupRole(USER_ROLE, to);
