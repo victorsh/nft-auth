@@ -86,13 +86,7 @@ contract AuthNFT is
 
   function mint(address to, string calldata special_str, uint256 special_num, bytes32 permission) public {
     require(hasRole(MINTER_ROLE, _msgSender()), "AuthNFT: Must have minter role to mint.");
-    console.log("premint");
     _mint(to, _tokenIdTracker.current());
-    
-    if (permission == ADMIN_ROLE) {
-      console.log("matches");
-    }
-    console.log(_tokenIdTracker.current());
 
     uint256 rand_num = (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))));
     Content memory content = Content(special_str, special_num, rand_num, permission);
