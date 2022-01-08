@@ -1,3 +1,5 @@
+import {ethers} from 'ethers'
+
 export const connectWallet = async () => {
   const provider = new ethers.providers.Web3Provider(
     window.ethereum, "any"
@@ -9,9 +11,9 @@ export const connectWallet = async () => {
   console.log(userAddress)
   let balance = await provider.getBalance(userAddress)
   console.log(balance)
-  let mySig = await signer.signMessage('Signed NFTAuth')
-  console.log(mySig)
-  console.log(nftAuthAbi)
+  // let mySig = await signer.signMessage('Signed NFTAuth')
+  // console.log(mySig)
+  return { userAddr: userAddress, userBalance: balance }
 }
 
 export const checkMetamaskConnected = async () => {

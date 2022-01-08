@@ -85,7 +85,7 @@ contract AuthNFT is
   }
 
   function mint(address to, string calldata special_str, uint256 special_num, bytes32 permission) public {
-    require(hasRole(MINTER_ROLE, _msgSender()), "AuthNFT: Must have minter role to mint.");
+    // require(hasRole(MINTER_ROLE, _msgSender()), "AuthNFT: Must have minter role to mint.");
     _mint(to, _tokenIdTracker.current());
 
     uint256 rand_num = (uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))));
