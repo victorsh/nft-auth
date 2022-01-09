@@ -25,3 +25,6 @@ npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
 ```
+
+#### Sources
+Free Icons: https://heroicons.dev/
