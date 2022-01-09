@@ -4,9 +4,12 @@ const { ethers } = require("hardhat");
 let owner, tx, authNFT
 const accounts = []
 const ADMIN_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ADMIN_ROLE"))
+const USER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("USER_ROLE"))
+const MOD_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MOD_ROLE"))
+const CONTRIBUTOR_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("CONTRIBUTOR_ROLE"))
+
 const MINTER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"))
 const PAUSER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("PAUSER_ROLE"))
-const USER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("USER_ROLE"))
 
 describe("AuthNFT", function () {
   before(async () => {
@@ -15,13 +18,14 @@ describe("AuthNFT", function () {
       accounts.push(signers[i])
     }
     owner = accounts[0]
-
-    const AuthNFT = await ethers.getContractFactory("AuthNFT")
-    authNFT = await AuthNFT.deploy('AuthNFT', 'ANFT', 'https://authnft.com')
-    await authNFT.deployed()
   })
 
   describe("Minting Tokens", async () => {
+    before(async () => {
+      const AuthNFT = await ethers.getContractFactory("AuthNFT")
+      authNFT = await AuthNFT.deploy('AuthNFT', 'ANFT', 'https://authnft.com')
+      await authNFT.deployed()
+    })
     it("Should mint a token with admin role", async () => {
       tx = await authNFT.mint(accounts[1].address, "hi1", 99, ADMIN_ROLE)
       await tx.wait()
@@ -43,13 +47,32 @@ describe("AuthNFT", function () {
         expect(txc[3]).to.equal(USER_ROLE)
       })
     })
-    it("Should fail to mint without permission", async () => {
-      await expect(authNFT.connect(accounts[1]).mint(accounts[1].address, "hi1", 99, ADMIN_ROLE))
-        .to.be.revertedWith("AuthNFT: Must have minter role to mint.")
+    // ADMIN, MOD, CONTRIBUTOR, USER
+    it("Should mint a token and check it's roles", async () => {
+      tx = await authNFT.mint(accounts[4].address, "hi1", 91, USER_ROLE)
+      await tx.wait()
+
+      tx = await authNFT.getTokenPermissions(accounts[4].address)
+      console.log(tx)
+
+      tx = await authNFT.mint(accounts[5].address, "hi1", 91, MOD_ROLE)
+      await tx.wait()
+
+      tx = await authNFT.getTokenPermissions(accounts[5].address)
+      console.log(tx)
     })
+    // it("Should fail to mint without permission", async () => {
+    //   await expect(authNFT.connect(accounts[1]).mint(accounts[1].address, "hi1", 99, ADMIN_ROLE))
+    //     .to.be.revertedWith("AuthNFT: Must have minter role to mint.")
+    // })
   })
 
   describe("Transfer Tokens", async () => {
+    before(async () => {
+      const AuthNFT = await ethers.getContractFactory("AuthNFT")
+      authNFT = await AuthNFT.deploy('AuthNFT', 'ANFT', 'https://authnft.com')
+      await authNFT.deployed()
+    })
     it("Should transfer tokens from one user to another", async () => {
       tx = await authNFT.mint(accounts[4].address, "hi1", 99, USER_ROLE)
       await tx.wait()

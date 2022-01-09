@@ -5,21 +5,13 @@ import Head from 'next/head'
 import Nav from '../components/Nav'
 import Button from '../components/Button'
 
-import nftAuthAbi from '../components/abis/nftAuthAbi.json'
 import { mintToken, getOwnedTokens } from '../lib/blockchain/AuthNFT'
 import permissionToText from '../lib/util/permissionToText'
-
-const ADMIN_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ADMIN_ROLE"))
-const MINTER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"))
-const PAUSER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("PAUSER_ROLE"))
-const USER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("USER_ROLE"))
+import { ADMIN_ROLE, MOD_ROLE, CONTRIBUTOR_ROLE, USER_ROLE } from '../lib/blockchain/permissions'
 
 export default function Home() {
   const [tokenContent, setTokenContent] = useState([])
   const [mintParams, setMintParams] = useState({'text': 'sample', 'special': 0, 'role': USER_ROLE})
-  useEffect(async () => {
-    getFormatOwnedTokens()
-  }, [])
 
   const getFormatOwnedTokens = async () => {
     const ownedTokens = await getOwnedTokens() 
@@ -35,7 +27,10 @@ export default function Home() {
   const handleMintToken = () => {
     mintToken(mintParams.text, mintParams.special, mintParams.role)
   }
-  
+
+  useEffect(async () => {
+    getFormatOwnedTokens()
+  }, [])
   return (
     <>
       <Head>
@@ -43,7 +38,7 @@ export default function Home() {
       </Head>
       <Nav />
       <div className='mx-auto flex flex-col w-1/2 bg-sky-900'>
-        <div className='text-black text-5xl mx-auto p-2'>Mint a new token</div>
+        <div className='text-white text-5xl mx-auto p-2'>Mint a new token</div>
         <div className='mx-auto flex flex-col w-1/2 justify-evenly'>
           <label className='text-zinc-300'>Message</label>
           <input className='p-1 border-1 border-black rounded text-gray-500' type='text' name='text' value={mintParams.text} onChange={e => handleMintInput(e)} />
@@ -52,12 +47,12 @@ export default function Home() {
           <label className='text-zinc-300'>Role</label>
           <select className='p-1 border-1 border-black rounded text-gray-500' name='role' onChange={e => handleMintInput(e)}>
             <option value={ADMIN_ROLE}>Admin Role</option>
-            <option value={MINTER_ROLE}>Minter Role</option>
-            <option value={PAUSER_ROLE}>Pauser Role</option>
+            <option value={MOD_ROLE}>Moderator Role</option>
+            <option value={CONTRIBUTOR_ROLE}>Contributor Role</option>
             <option value={USER_ROLE}>User Role</option>
           </select>
         </div>
-        <div className='w-1/2 mx-auto'>
+        <div className='w-1/2 mx-auto flex justify-center mt-4 pb-0'>
           <Button fn={() => handleMintToken()}>Mint Token</Button>
         </div>
       </div>

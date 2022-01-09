@@ -1,11 +1,7 @@
 import nftAuthAbi from '../../components/abis/nftAuthAbi.json'
 import AuthNFTAddr from './AuthNFTAddr.json'
 import {ethers} from 'ethers'
-
-const ADMIN_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("ADMIN_ROLE"))
-const MINTER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("MINTER_ROLE"))
-const PAUSER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("PAUSER_ROLE"))
-const USER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("USER_ROLE"))
+import { ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE, USER_ROLE } from './permissions'
 
 export const mintToken = async (text, special, role) => {
   const provider = new ethers.providers.Web3Provider(
@@ -55,4 +51,16 @@ export const getRoles = async () => {
   const AuthNFTContract = new ethers.Contract(AuthNFTAddr.addr, nftAuthAbi.abi, signer)
 
   return await AuthNFTContract.getRoles()
+}
+
+export const getPermissions = async () => {
+  const provider = new ethers.providers.Web3Provider(
+    window.ethereum, "any"
+  )
+  const signer = await provider.getSigner()
+  const AuthNFTContract = new ethers.Contract(AuthNFTAddr.addr, nftAuthAbi.abi, signer)
+
+  let userAddr = await signer.getAddress()
+
+  return AuthNFTContract.getTokenPermissions(userAddr)
 }

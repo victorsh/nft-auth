@@ -48,7 +48,7 @@ export default function Nav() {
   }, [])
   return (
     <>
-      <nav className="flex items-center justify-between flex-wrap bg-gray-500 p-6">
+      <nav className="w-1/2 mx-auto flex items-center justify-between flex-wrap bg-gray-500 p-6">
         <div className="flex items-center flex-shrink-0 text-white mr-6">
           <svg
             className="fill-current h-8 w-8 mr-2"
@@ -73,39 +73,37 @@ export default function Nav() {
           </button>
         </div>
 
-        
-          <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-          {toggleMenu || windowSize.width > 1024 ?
-            <div className="text-sm lg:flex-grow">
-              <Link href="/">
-                <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Home</a>
-              </Link>
-              <Link href="/admin">
-                <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Admin</a>
-              </Link>
-              <Link href="/">
-                <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">About</a>
-              </Link>
-              <Link href="/">
-                <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Example</a>
-              </Link>
-            </div>
-            : ''}
-            <div>
-              <button
-                onClick={() => connectWallet()}
-                className="\
-                  inline-block text-sm px-4 py-2 mt-4 lg:mt-0 w-20\
-                  leading-none border rounded text-white border-white \
-                  hover:border-transparent hover:text-teal-500 hover:bg-white"
-              >
-                <div className="w-20 overflow-clip">
-                  {metamaskConnected}
-                </div>
-              </button>
-            </div>
+        <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        {toggleMenu || windowSize.width > 1024 ?
+          <div className="text-sm lg:flex-grow">
+            <Link href="/">
+              <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Home</a>
+            </Link>
+            <Link href="/admin">
+              <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Admin</a>
+            </Link>
+            <Link href="/">
+              <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">About</a>
+            </Link>
+            <Link href="/">
+              <a className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">Example</a>
+            </Link>
           </div>
-        
+          : ''}
+          <div>
+            <button
+              onClick={() => connectWallet()}
+              className="\
+                inline-block text-sm px-4 py-2 mt-4 lg:mt-0 w-20\
+                leading-none border rounded text-white border-white \
+                hover:border-transparent hover:text-teal-500 hover:bg-white"
+            >
+              <div className="w-20 overflow-clip">
+                {metamaskConnected}
+              </div>
+            </button>
+          </div>
+        </div>
       </nav>
     </>
   )

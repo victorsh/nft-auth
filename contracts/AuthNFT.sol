@@ -21,9 +21,13 @@ contract AuthNFT is
   address owner;
 
   bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+  bytes32 public constant MOD_ROLE = keccak256("MOD_ROLE");
+  bytes32 public constant CONTRIBUTOR_ROLE = keccak256("CONTRIBUTOR_ROLE");
+  bytes32 public constant USER_ROLE = keccak256("USER_ROLE");
+
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-  bytes32 public constant USER_ROLE = keccak256("USER_ROLE");
+  
 
   Counters.Counter private _tokenIdTracker;
 
@@ -47,12 +51,11 @@ contract AuthNFT is
     _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     _setupRole(MINTER_ROLE, _msgSender());
     _setupRole(PAUSER_ROLE, _msgSender());
-    _setupRole(USER_ROLE, _msgSender());
     owner = msg.sender;
   }
 
   function getRoles() public view returns (string[] memory) {
-    string[] memory roles = new string[](4);
+    string[] memory roles = new string[](3);
     if (hasRole(DEFAULT_ADMIN_ROLE, _msgSender())) {
       roles[0] = "DEFAULT_ADMIN_ROLE";
     } else {
@@ -69,12 +72,6 @@ contract AuthNFT is
       roles[2] = "PAUSER_ROLE";
     } else {
       roles[2] = "FALSE";
-    }
-
-    if (hasRole(USER_ROLE, _msgSender())) {
-      roles[3] = "USER_ROLE";
-    } else {
-      roles[3] = "FALSE";
     }
 
     return roles;
@@ -107,6 +104,26 @@ contract AuthNFT is
       _tokensOfOwner[i] = ERC721Enumerable.tokenOfOwnerByIndex(_owner, i);
     }
     return (_tokensOfOwner);
+  }
+
+  function getTokenPermissions(address _owner) public view returns(bool[4] memory isRole) {
+    isRole = [false, false, false, false];
+    for (uint i = 0; i < ERC721.balanceOf(_owner); i++) {
+      uint256 tokenId = ERC721Enumerable.tokenOfOwnerByIndex(_owner, i);
+      Content memory content = _tokenIdToContent[tokenId];
+      if (content.permission == ADMIN_ROLE) {
+        isRole[0] = true;
+      }
+      if (content.permission == MOD_ROLE) {
+        isRole[1] = true;
+      }
+      if (content.permission == CONTRIBUTOR_ROLE) {
+        isRole[2] = true;
+      }
+      if (content.permission == USER_ROLE) {
+        isRole[3] = true;
+      }
+    }
   }
 
   function burn(uint256 tokenId) public override {
