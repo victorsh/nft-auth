@@ -15,6 +15,9 @@ test: `npx hardhat test test/AuthNFT-test.js`
 deploy-local: `npx hardhat run --network localhost scripts/deploy-nft-auth.js`
 deploy-mumbai: `npx hardhat run --network mumbai scripts/deploy-nft-auth.js`
 
+#### Deployments
+Mumbai Deploy: 0x2a1d80a434De6834dd477d71798D44132eAbac47
+
 #### Hardhat Commands
 ```shell
 npx hardhat accounts

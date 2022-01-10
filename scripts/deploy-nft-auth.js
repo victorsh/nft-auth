@@ -3,7 +3,7 @@ const path = require('path')
 
 async function main() {
   const AuthNFT = await ethers.getContractFactory("AuthNFT")
-  const authNFT = await AuthNFT.deploy('AuthNFT', 'ANFT', 'http://localhost:3000')
+  const authNFT = await AuthNFT.deploy('AuthNFT', 'ANFT', 'https://anauthnft.com')
   await authNFT.deployed()
 
   const addrObj = { 'addr': authNFT.address}

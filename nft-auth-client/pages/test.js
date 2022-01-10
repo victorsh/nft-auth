@@ -29,7 +29,7 @@ export default function Test() {
           <div className="pt-6 md:p-8 text-center md:text-left space-y-4 w-full flex justify-center">
             <blockquote>
               <p className="text-lg font-medium text-white">
-                "something so mething something else and some more something to go along with it"
+                something so mething something else and some more something to go along with it
               </p>
             </blockquote>
           </div>
