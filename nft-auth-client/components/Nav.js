@@ -11,6 +11,18 @@ export default function Nav() {
     toggleMenu ? setToggleMenu(false) : setToggleMenu(true)
   }
 
+  const handleConnectWallet = async () => {
+    await connectWallet()
+    if (await checkMetamaskConnected()) {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum, "any"
+      )
+      const signer = await provider.getSigner()
+      const address = await signer.getAddress()
+      setMetamaskConnected(address)
+    }
+  }
+
   const useWindowSize = () => {
     const [windowSize, setWindowSize] = useState({
       width: undefined,
@@ -92,7 +104,7 @@ export default function Nav() {
           : ''}
           <div>
             <button
-              onClick={() => connectWallet()}
+              onClick={() => handleConnectWallet()}
               className="\
                 inline-block text-sm px-4 py-2 mt-4 lg:mt-0 w-20\
                 leading-none border rounded text-white border-white \

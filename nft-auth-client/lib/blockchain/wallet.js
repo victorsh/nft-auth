@@ -23,3 +23,11 @@ export const checkMetamaskConnected = async () => {
   const accounts = await provider.listAccounts()
   return accounts.length > 0
 }
+
+export const checkNetwork = async () => {
+  const provider = new ethers.providers.Web3Provider(
+    window.ethereum, "any"
+  )
+  const { chainId } = await provider.getNetwork()
+  return chainId === 80001
+}

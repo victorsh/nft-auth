@@ -3,6 +3,8 @@
 This is a sample project showcasing NFTs with User Authorization levels. Each nft minted to a user gives that user a certain permission level. The permission
 level determines what can be accessed within the frontend of the application.
 
+[Deployed Frontend](https://61db846d48a39cbab9746f98--xenodochial-kowalevski-5a952e.netlify.app/)
+
 #### Client Install & Run
 The client is built using NextJS and TailwindCSS
 

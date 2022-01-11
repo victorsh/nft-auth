@@ -6,6 +6,7 @@ import Nav from '../components/Nav'
 import Button from '../components/Button'
 
 import { mintToken, getOwnedTokens, getPermissions } from '../lib/blockchain/AuthNFT'
+import { checkNetwork } from '../lib/blockchain/wallet'
 import permissionToText from '../lib/util/permissionToText'
 import { ADMIN_ROLE, MOD_ROLE, CONTRIBUTOR_ROLE, USER_ROLE } from '../lib/blockchain/permissions'
 
@@ -47,7 +48,11 @@ export default function Home() {
   }
 
   useEffect(async () => {
-    getFormatOwnedTokens()
+    if (await checkNetwork()) {
+      getFormatOwnedTokens()
+    } else {
+      alert('Please switch to Mumbai and Refresh')
+    }
   }, [])
   return (
     <>
